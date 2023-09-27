@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 // Root Endpoint
 // Displays a simple message to the user
 app.get( "/", async (req, res) => {
-  res.status(200).send("Welcome To Help Find Missing People Project");
+  res.status(200).send("Image Processing Microservice on AWS");
 } );
 
 app.use(filteredImageRoutes);

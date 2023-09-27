@@ -1,7 +1,15 @@
 FROM node:18-alpine
 
-WORKDIR /app
+ENV PORT="8081"
+ENV AWS_ACCESS_KEY_ID="AKIA4GODMB7S6O2FV244"
+ENV AWS_SECRET_ACCESS_KEY="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"
+ENV AWS_REGION="us-east-1"
+ENV AWS_S3_BUCKET_NAME="tuannv78-aws-bucket"
+ENV LOCAL_PATH="./tmp/"
+
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
 COPY . .
-RUN yarn install --production
-CMD ["node", "src/index.js"]
-EXPOSE 3000
+
+CMD [ "node", "src/server.js" ]

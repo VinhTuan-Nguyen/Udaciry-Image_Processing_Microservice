@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18
 
 ENV PORT="8081"
 ENV AWS_ACCESS_KEY_ID="AKIA4GODMB7S6O2FV244"
@@ -7,9 +7,9 @@ ENV AWS_REGION="us-east-1"
 ENV AWS_S3_BUCKET_NAME="tuannv78-aws-bucket"
 ENV LOCAL_PATH="./tmp/"
 
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-
+RUN npm run dev
 CMD [ "node", "src/server.js" ]

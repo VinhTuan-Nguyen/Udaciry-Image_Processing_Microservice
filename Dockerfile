@@ -9,5 +9,5 @@ ENV LOCAL_PATH="./tmp/"
 
 WORKDIR /app
 COPY . .
-RUN npm insstall
-CMD [ "npm", "run dev" ]
+RUN npm install
+CMD node -r dotenv/config ./src/server.js

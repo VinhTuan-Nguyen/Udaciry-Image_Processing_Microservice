@@ -1,8 +1,8 @@
 import fs from 'fs';
 import express from 'express';
 import bodyParser from 'body-parser';
-import { upload } from '../util/S3Client.js';
-import { filterImageFromURL, validateURL } from '../util/util.js';
+import { upload } from './util/S3Client.js';
+import { filterImageFromURL, validateURL } from './util/util.js';
 
 // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
 // GET /filteredimage?image_url={{URL}}

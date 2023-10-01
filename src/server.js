@@ -1,8 +1,8 @@
 import fs from 'fs';
 import express from 'express';
 import bodyParser from 'body-parser';
-import { upload } from './util/S3Client.js';
-import { filterImageFromURL, validateURL } from './util/util.js';
+import { upload } from '../util/S3Client.js';
+import { filterImageFromURL, validateURL } from '../util/util.js';
 
 // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
 // GET /filteredimage?image_url={{URL}}
@@ -36,20 +36,20 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/filteredimage", async (req, res) => {
-  try {
-    let image_url = req.query.image_url
-    image_url = image_url.replaceAll("\"", "")
-    let isTrue = validateURL(image_url)
-    if (isTrue) {
-      await filterImageFromURL(req.query.image_url)
-      upload();
-      return res.status(200).send("Image Uploaded Successfully");
-    } else return res.status(422).send("This is not an image url")
-  } catch (error) {
-    return res.status(500).send("Internal Server Error: " + error);
-  } finally {
-    fs.rmSync(process.env.LOCAL_PATH, { recursive: true, force: true })
-  }
+  var image_url = req.query.image_url.replaceAll("\"", "")
+  const promise = new Promise( async(resolve, reject) => {
+    try {
+      if (validateURL(image_url)) {
+        let index = Math.floor(Math.random() * 2000);
+        await filterImageFromURL(req.query.image_url, index)
+        upload();
+        resolve(res.status(200).sendFile('filtered.'+index+'.jpg', {root: process.env.LOCAL_PATH}));
+      } else resolve(res.status(422).send("This is not an image url"));
+    } catch (error) {
+      reject(res.status(500).send("Internal Server Error: " + error));
+    }
+  });
+  return promise.finally(fs.rmSync(process.env.LOCAL_PATH, { recursive: true, force: true }))
 });
 
 app.listen(port, () => {
